@@ -262,7 +262,7 @@ surveyIndex:::plot.SIlist( subidx , rescale=FALSE,allCI=TRUE,main="Litter densit
 dev.off()
 
 sink("output/modelSummary.txt")
-summary(model$pModels[[1]])
+print(summary(model$pModels[[1]]))
 sink()
 
 ## QQ-plot

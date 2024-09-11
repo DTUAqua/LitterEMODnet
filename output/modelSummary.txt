@@ -1,0 +1,43 @@
+
+Family: Negative Binomial(0.9) 
+Link function: log 
+
+Formula:
+A1 ~ Year + Gear2 + s(lon, lat, bs = "ds", m = c(1, 0.5), k = 512) + 
+    s(lon, lat, bs = c("ds"), k = 64, m = c(1, 0.5), by = Year, 
+        id = 1) + offset(log(EFFORT))
+
+Parametric coefficients:
+            Estimate Std. Error  z value Pr(>|z|)    
+(Intercept) -9.52697    0.06851 -139.053  < 2e-16 ***
+Year2013    -0.01493    0.07006   -0.213 0.831201    
+Year2014     0.26202    0.06926    3.783 0.000155 ***
+Year2015     0.09848    0.07492    1.314 0.188711    
+Year2016     0.41767    0.07252    5.759 8.44e-09 ***
+Year2017     0.38663    0.06512    5.937 2.90e-09 ***
+Year2018     0.36301    0.06197    5.858 4.68e-09 ***
+Year2019     0.57665    0.07174    8.038 9.14e-16 ***
+Year2020     0.50336    0.06168    8.161 3.32e-16 ***
+Year2021     0.43245    0.08020    5.392 6.97e-08 ***
+Gear2OTT    -1.14319    0.04846  -23.589  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                       edf Ref.df  Chi.sq  p-value    
+s(lon,lat)          304.86    511 1970.85  < 2e-16 ***
+s(lon,lat):Year2012  24.68     63  115.78  < 2e-16 ***
+s(lon,lat):Year2013  25.88     63   85.29  < 2e-16 ***
+s(lon,lat):Year2014  26.34     63   87.97  < 2e-16 ***
+s(lon,lat):Year2015  26.44     63   44.41 1.03e-06 ***
+s(lon,lat):Year2016  28.91     63   68.77  < 2e-16 ***
+s(lon,lat):Year2017  28.56     63   74.00  < 2e-16 ***
+s(lon,lat):Year2018  31.24     63   81.08  < 2e-16 ***
+s(lon,lat):Year2019  29.87     63  104.21  < 2e-16 ***
+s(lon,lat):Year2020  31.36     63   82.63  < 2e-16 ***
+s(lon,lat):Year2021  25.59     63  216.53  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =   0.12   Deviance explained =   49%
+-ML =  20514  Scale est. = 1         n = 13745
