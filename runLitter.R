@@ -5,6 +5,9 @@
 ## Sep 2024
 #############################################################################################
 
+## remotes::install_github("DTUAqua/DATRAS/DATRAS")
+## remotes::install_github("casperwberg/surveyIndex/surveyIndex")
+
 library(DATRAS)
 library(maps); library(mapdata)
 library(surveyIndex)
