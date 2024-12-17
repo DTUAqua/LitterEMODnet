@@ -5,14 +5,28 @@
 ## Sep 2024
 #############################################################################################
 
-## remotes::install_github("DTUAqua/DATRAS/DATRAS")
-## remotes::install_github("casperwberg/surveyIndex/surveyIndex")
+#set seed
+set.seed(1)
 
-library(DATRAS)
-library(maps); library(mapdata)
-library(surveyIndex)
-library(marmap)
+#If DATRAS is not installed, install package
+if( !('DATRAS' %in% installed.packages()[,"Package"])){
+  remotes::install_github("DTUAqua/DATRAS/DATRAS")
+}
 
+#If SurveyIndex is not installed, install package
+if( !('surveyIndex' %in% installed.packages()[,"Package"])){
+  remotes::install_github("DTUAqua/DATRAS/DATRAS")
+}
+
+#list of required packages
+list.of.packages <- c('maps', 'mapdata', 'marmap', 'RANN','DATRAS', 'surveyIndex')
+
+#Install required packages
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
+#Load all packages
+lapply(list.of.packages, require, character.only = TRUE)
 
 ## data frame to DATRASraw object - surveyIndex package expects this structure
 df2dr<-function(x){
