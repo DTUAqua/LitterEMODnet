@@ -15,7 +15,7 @@ if( !('DATRAS' %in% installed.packages()[,"Package"])){
 
 #If SurveyIndex is not installed, install package
 if( !('surveyIndex' %in% installed.packages()[,"Package"])){
-  remotes::install_github("DTUAqua/DATRAS/DATRAS")
+  remotes::install_github("casperwberg/surveyIndex/surveyIndex")
 }
 
 #list of required packages
