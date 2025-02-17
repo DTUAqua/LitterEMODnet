@@ -1,4 +1,4 @@
-Import.Data<-function(path='Data/EMD_seafloorbaselines_EEA_waters_filtered_20230317.csv',type='EMOD'){
+Import.Data<-function(path,type){
   
   #Import Data  
   data<-read.csv(path)

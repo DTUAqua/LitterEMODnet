@@ -1,15 +1,3 @@
-rm(list=ls()) #clean up memory before start
-options(dplyr.summarise.inform = FALSE) #Do not print info from dplyr package 
-# ---------------------------------------------
-#User parameters
-# ---------------------------------------------
-#path to data file
-path='Data/EMD_seafloorbaselines_EEA_waters_filtered_20230317.csv'
-
-#which dataset do you want to import? Choose amongst EMOD, BITS, 
-#BTS, DYFS, EVHOE, IE-IGFS, NS-IBTS, SCOWCGFS
-type='EMOD'
-
 # ---------------------------------------------
 #Define and install libraries
 # ---------------------------------------------
@@ -25,9 +13,9 @@ lapply(list.of.packages, require, character.only = TRUE)
 # ---------------------------------------------
 #load funtions
 # ---------------------------------------------
-source('Functions/Import_Data.R')
-source('Functions/Make_Matrix.R')
-source('Functions/Translation_LitterCat.R')
+source('Litter_summary/Functions/Import_Data.R')
+source('Litter_summary/Functions/Make_Matrix.R')
+source('Litter_summary/Functions/Translation_LitterCat.R')
 
 # ---------------------------------------------
 #Import Data
@@ -68,9 +56,9 @@ SubcatTable<-Make.matrix(data, type='sub')
 # ---------------------------------------------
 #Make Excel
 # ---------------------------------------------
-write.xlsx(as.data.frame(SummaryTable), file=paste0('Output/Summary_',type,  '_Data.xlsx'), sheetName = "Litter_summary", 
+write.xlsx(as.data.frame(SummaryTable), file=paste0('output/Summary_',type,  '_Data.xlsx'), sheetName = "Litter_summary", 
            col.names = TRUE, row.names = F, append = FALSE)
-write.xlsx(as.data.frame(CatTable), file=paste0('Output/Summary_',type,  '_Data.xlsx'), sheetName = "Litter_Cat_summary", 
+write.xlsx(as.data.frame(CatTable), file=paste0('output/Summary_',type,  '_Data.xlsx'), sheetName = "Litter_Cat_summary", 
            col.names = TRUE, row.names = TRUE, append = TRUE)
-write.xlsx(SubcatTable, file=paste0('Output/Summary_',type,  '_Data.xlsx'), sheetName = "Litter_Subcat_summary", 
+write.xlsx(SubcatTable, file=paste0('output/Summary_',type,  '_Data.xlsx'), sheetName = "Litter_Subcat_summary", 
            col.names = TRUE, row.names = TRUE, append = TRUE)

@@ -1,6 +1,6 @@
 Translation.LitterCat<-function(Data){
   #Read excel + define colnames
-  litterCat<-as.data.frame(read.xlsx('Input/LitterCat.xlsx',1))
+  litterCat<-as.data.frame(read.xlsx('Litter_summary/Input/LitterCat.xlsx',1))
   rownames(litterCat)<-litterCat[,1]
   litterCat<-litterCat[,-1]
   
