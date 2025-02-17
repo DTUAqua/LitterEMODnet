@@ -93,9 +93,9 @@ d = subset(d,! Year %in% as.character(2006:2011)) ## Too few data from 2011 and 
 d$Year = factor(d$Year)
 
 
-addSweptAreaSimple<-function(d,minSpeed=1,minDist=500,maxDistDev=0.2){
+addSweptAreaSimple<-function(d,minSpeed=1,minDist=0,maxDistDev=0.2){
     d$GroundSpeed[ d$GroundSpeed < minSpeed ] <- NA
-    d$Distance[ d$GroundSpeed < minDist ] <- NA
+    d$Distance[ d$Distance < minDist ] <- NA
     d$WingSpread[ d$WingSpread<=0 ] <- NA
     d$WingSpread[ d$Gear=="GOV" & ( d$WingSpread<5 | d$WingSpread >40 ) ] <- NA
 
