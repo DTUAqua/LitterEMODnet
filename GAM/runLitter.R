@@ -357,7 +357,7 @@ for(i in 1:length(subidx)){
       label_GES<-'No GES.'
     }
     
-    legend("topleft",lty=1,col=c(4,3),legend= paste0("Trend last ", n.Years," years, \n Threshold for", threshold ,"% increase is ", round(averaged,2), ",\n with a real maximum increase of ", round(emt$upper.CL,2), ". ", label_GES  ))
+    legend("topleft",lty=1,col=c(4,3),legend= paste0("Threshold for", threshold ,"% increase is ", round(averaged,2), ",\n with a real maximum increase of ", round(emt$upper.CL,2), ". ", label_GES  ))
 
 }
 dev.off()
