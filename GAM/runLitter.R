@@ -320,8 +320,8 @@ myabline <- function(x,xlim,...){
 }
 
 ## Global 
-trendAnalysis(model)
-trendAnalysis(model,nyears=10)
+#trendAnalysis(model)
+#trendAnalysis(model,nyears=10)
 
 threshold<-0.05
 p_value<-0.10
@@ -347,7 +347,7 @@ for(i in 1:length(subidx)){
     #estimated intercept
     #coefficients(ta$model)[1]*0.05
     #
-    averaged<-mean(head(tmp$litter,3))*threshold
+    averaged<-mean(head(ta$data$litter,3))*threshold
     
     emt<-emtrends(ta$model,"Year",var=1,side="<", level = p_value)
     emt<-as.data.frame(emt)
