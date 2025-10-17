@@ -19,7 +19,7 @@ if( !('surveyIndex' %in% installed.packages()[,"Package"])){
 }
 
 #list of required packages
-list.of.packages <- c('maps', 'mapdata', 'marmap', 'RANN','DATRAS', 'surveyIndex')
+list.of.packages <- c('maps', 'mapdata', 'marmap', 'RANN','DATRAS', 'surveyIndex','emmeans')
 
 #Install required packages
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
@@ -256,6 +256,9 @@ dev.off()
 #########################################################################
 ## Calculate litter trends for subareas using the grand model
 #########################################################################
+#########################################################################
+## Calculate litter trends for subareas using the grand model
+#########################################################################
 subgrids = list()
 subidx = list()
 
@@ -298,9 +301,13 @@ trendAnalysis<-function(x,nyears=6){
     summa <- summary(tm)
     pval = summa$coefficients[2,4]
     trend = summa$coefficients[2,1]
+    Percent = trend/(tail(tmp,nyears)[1,1])*100
     sigma = summa$coefficients[2,2]
-    citrend = confint(tm)[2,] 
-    return( list( model = tm, pvalue = pval, trend = trend, sigma = sigma,citrend = citrend))
+    sigmaPercent = summa$coefficients[2,2]/(tail(tmp,nyears)[1,1])*100
+    citrend = confint(tm, level=0.95)[2,] 
+    
+    citrendPercent= confint(tm, level=0.95)[2,] /(tail(tmp,nyears)[1,1])*100
+    return( list( model = tm, data= tail(tmp,nyears), pvalue = pval, trend = trend, Percent=Percent, sigma = sigma, sigmaPercent=sigmaPercent, citrend = citrend,  citrendPercent= citrendPercent))
 }
 
 
@@ -312,26 +319,46 @@ myabline <- function(x,xlim,...){
     clip(usr[1],usr[2],usr[3],usr[4])
 }
 
-## Global trend
+## Global 
 trendAnalysis(model)
 trendAnalysis(model,nyears=10)
 
+threshold<-0.05
+p_value<-0.10
+n.Years<-6
+
 trends <- list()
-pdf("output/trendsbyEEZ.pdf",width=10,height=8,pointsize=10)
+pdf("output/trendsbyEEZ_6years.pdf",width=10,height=8,pointsize=10)
 par(mfrow=n2mfrow(length(subidx)),mar=c(4,3,4,1))
 for(i in 1:length(subidx)){
     surveyIndex:::plot.SIlist(list(subidx[[i]]),main=names(subidx)[i])
-    ta = trendAnalysis(subidx[[i]])
+    ta = trendAnalysis(subidx[[i]], n.Years)
+    
+    
+    
+    
+    
     trends[[ names(subidx)[i] ]] <- ta 
-    yrange <- range(as.numeric( tail( rownames(subidx[[i]]$idx),6)))
+    yrange <- range(as.numeric( tail( rownames(subidx[[i]]$idx),n.Years)))
     myabline(ta$model,col=3,lwd=2,xlim=yrange)
     
-    ta2 = trendAnalysis(subidx[[i]],10)
-    yrange <- range(as.numeric( tail( rownames(subidx[[i]]$idx),10)))
-    myabline(ta2$model,col=4,lwd=2,xlim=yrange)
+   
     
-    legend("topleft",lty=1,col=c(4,3),legend=c(paste("Trend last 10 years",round(ta2$trend,1),"(+/-",round(ta2$sigma*2,1),") p=",round(ta2$pvalue,3)),
-                                               paste("Trend last 6 years",round(ta$trend,1),"(+/-",round(diff(ta$citrend)/2,1),") p=",round(ta$pvalue,3))),lwd=2)
+    #estimated intercept
+    #coefficients(ta$model)[1]*0.05
+    #
+    averaged<-mean(head(tmp$litter,3))*threshold
+    
+    emt<-emtrends(ta$model,"Year",var=1,side="<", level = p_value)
+    emt<-as.data.frame(emt)
+    if (emt$upper.CL<averaged){
+      label_GES<-'GES.'
+    }else{
+      label_GES<-'No GES.'
+    }
+    
+    legend("topleft",lty=1,col=c(4,3),legend= paste0("Trend last ", n.Years," years, \n Threshold for", threshold ,"% increase is ", round(averaged,2), ",\n with a real maximum increase of ", round(emt$upper.CL,2), ". ", label_GES  ))
+
 }
 dev.off()
 
