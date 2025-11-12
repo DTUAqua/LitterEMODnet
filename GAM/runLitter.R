@@ -323,23 +323,23 @@ myabline <- function(x,xlim,...){
 #trendAnalysis(model)
 #trendAnalysis(model,nyears=10)
 
-threshold<-0.05
-p_value<-0.10
-n.Years<-6
+Maximum_increase<-0.05
+Confidence_interval<-0.10
+Timeframe<-6
 
 trends <- list()
 pdf("output/trendsbyEEZ_6years.pdf",width=10,height=8,pointsize=10)
 par(mfrow=n2mfrow(length(subidx)),mar=c(4,3,4,1))
 for(i in 1:length(subidx)){
     surveyIndex:::plot.SIlist(list(subidx[[i]]),main=names(subidx)[i])
-    ta = trendAnalysis(subidx[[i]], n.Years)
+    ta = trendAnalysis(subidx[[i]], Timeframe)
     
     
     
     
     
     trends[[ names(subidx)[i] ]] <- ta 
-    yrange <- range(as.numeric( tail( rownames(subidx[[i]]$idx),n.Years)))
+    yrange <- range(as.numeric( tail( rownames(subidx[[i]]$idx),Timeframe)))
     myabline(ta$model,col=3,lwd=2,xlim=yrange)
     
    
@@ -347,9 +347,9 @@ for(i in 1:length(subidx)){
     #estimated intercept
     #coefficients(ta$model)[1]*0.05
     #
-    averaged<-mean(head(ta$data$litter,3))*threshold
+    averaged<-mean(head(ta$data$litter,3))*Maximum_increase
     
-    emt<-emtrends(ta$model,"Year",var=1,side="<", level = p_value)
+    emt<-emtrends(ta$model,"Year",var=1,side="<", level = Confidence_interval)
     emt<-as.data.frame(emt)
     if (emt$upper.CL<averaged){
       label_GES<-'GES.'
@@ -357,7 +357,7 @@ for(i in 1:length(subidx)){
       label_GES<-'No GES.'
     }
     
-    legend("topleft",lty=1,col=c(4,3),legend= paste0("Threshold for", threshold ,"% increase is ", round(averaged,2), ",\n with a real maximum increase of ", round(emt$upper.CL,2), ". ", label_GES  ))
+    legend("topleft",lty=1,col=c(4,3),legend= paste0("Maximum increase for", Maximum_increase ,"% increase is ", round(averaged,2), ",\n with a real maximum increase of ", round(emt$upper.CL,2), ". ", label_GES  ))
 
 }
 dev.off()
