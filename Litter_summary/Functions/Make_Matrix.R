@@ -37,6 +37,7 @@ Make.matrix<-function(Data=data, type='cat'){
       #isolate data for country c in year y
       temp<-data%>%filter(Year==y)%>%filter(Country==c)%>%
               group_by(Country, Year,Cat)%>%
+              filter(!is.na(Country)& !is.na(Year) & !is.na(Cat))%>%
               dplyr::summarise(N=sum(LT_Items, na.rm=T))
       #if there is litter reported
       if (dim(temp)[1]>0){
