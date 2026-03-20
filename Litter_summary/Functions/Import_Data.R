@@ -1,7 +1,7 @@
 Import.Data<-function(path,type){
   
   #Import Data  
-  data<-read.csv(path, CSV_separator)
+  data<-read.csv(path, sep=CSV_separator)
   
   if (type == 'EMOD'){
     #isolate the variables that will be used for assessment
