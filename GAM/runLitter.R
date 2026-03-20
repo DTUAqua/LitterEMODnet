@@ -302,30 +302,30 @@ abline(0,1,col=2,lwd=2)
 dev.off()
 
 trendAnalysis<-function(x,nyears=6){
-    tmp = data.frame(litter = x$idx[,1],
-                     Year = as.numeric(as.character(rownames(x$idx))),
-                     sig2 = ((x$up[,1] - x$lo[,1])/4)^2)
-    if(nyears>nrow(tmp)) stop("you asked for too many years")
-    tm = lm(litter ~ Year, weights = tail(1/tmp$sig2,nyears), data=tail(tmp,nyears))
-    summa <- summary(tm)
-    pval = summa$coefficients[2,4]
-    trend = summa$coefficients[2,1]
-    Percent = trend/(tail(tmp,nyears)[1,1])*100
-    sigma = summa$coefficients[2,2]
-    sigmaPercent = summa$coefficients[2,2]/(tail(tmp,nyears)[1,1])*100
-    citrend = confint(tm, level=0.95)[2,] 
-    
-    citrendPercent= confint(tm, level=0.95)[2,] /(tail(tmp,nyears)[1,1])*100
-    return( list( model = tm, data= tail(tmp,nyears), pvalue = pval, trend = trend, Percent=Percent, sigma = sigma, sigmaPercent=sigmaPercent, citrend = citrend,  citrendPercent= citrendPercent))
+  tmp = data.frame(litter = x$idx[,1],
+                   Year = as.numeric(as.character(rownames(x$idx))),
+                   sig2 = ((x$up[,1] - x$lo[,1])/4)^2)
+  if(nyears>nrow(tmp)) stop("you asked for too many years")
+  tm = lm(litter ~ Year, weights = tail(1/tmp$sig2,nyears), data=tail(tmp,nyears))
+  summa <- summary(tm)
+  pval = summa$coefficients[2,4]
+  trend = summa$coefficients[2,1]
+  Percent = trend/(tail(tmp,nyears)[1,1])*100
+  sigma = summa$coefficients[2,2]
+  sigmaPercent = summa$coefficients[2,2]/(tail(tmp,nyears)[1,1])*100
+  citrend = confint(tm, level=0.95)[2,] 
+  
+  citrendPercent= confint(tm, level=0.95)[2,] /(tail(tmp,nyears)[1,1])*100
+  return( list( model = tm, data= tail(tmp,nyears), pvalue = pval, trend = trend, Percent=Percent, sigma = sigma, sigmaPercent=sigmaPercent, citrend = citrend,  citrendPercent= citrendPercent))
 }
 
 
 ## as abline, but clip to xlim
 myabline <- function(x,xlim,...){
-    usr <- par("usr")
-    clip(min(xlim),max(xlim),usr[3],usr[4])
-    abline(x,...)
-    clip(usr[1],usr[2],usr[3],usr[4])
+  usr <- par("usr")
+  clip(min(xlim),max(xlim),usr[3],usr[4])
+  abline(x,...)
+  clip(usr[1],usr[2],usr[3],usr[4])
 }
 
 ## Global 
@@ -337,37 +337,46 @@ Confidence_interval<-0.10
 Timeframe<-6
 
 trends <- list()
-pdf("output/trendsbyEEZ_6years.pdf",width=10,height=8,pointsize=10)
+
+if (!file.exists(paste0("output/", N.sel))){
+  dir.create(paste0("output/", N.sel))
+}
+
+
+if (!file.exists(paste0("output/", N.sel, '/', rep))){
+  dir.create(paste0("output/", N.sel, '/', rep))
+}
+
+save(list = ls(.GlobalEnv),file=paste0("output/", N.sel,'/', rep, '/Data.RData' ))
+
+pdf(paste0("output/", N.sel,'/', rep ,"/trendsbyEEZ_6years.pdf"),width=10,height=8,pointsize=10)
 par(mfrow=n2mfrow(length(subidx)),mar=c(4,3,4,1))
 for(i in 1:length(subidx)){
-    surveyIndex:::plot.SIlist(list(subidx[[i]]),main=names(subidx)[i])
-    ta = trendAnalysis(subidx[[i]], Timeframe)
-    
-    
-    
-    
-    
-    trends[[ names(subidx)[i] ]] <- ta 
-    yrange <- range(as.numeric( tail( rownames(subidx[[i]]$idx),Timeframe)))
-    myabline(ta$model,col=3,lwd=2,xlim=yrange)
-    
-   
-    
-    #estimated intercept
-    #coefficients(ta$model)[1]*0.05
-    #
-    averaged<-mean(head(ta$data$litter,3))*Maximum_increase
-    
-    emt<-emtrends(ta$model,"Year",var=1,side="<", level = Confidence_interval)
-    emt<-as.data.frame(emt)
-    if (emt$upper.CL<averaged){
-      label_GES<-'GES.'
-    }else{
-      label_GES<-'No GES.'
-    }
-    
-    legend("topleft",lty=1,col=c(4,3),legend= paste0("Trend limit for", Maximum_increase ,"% increase is ", round(averaged,2), ",\n with a real maximum increase of ", round(emt$upper.CL,2), ". ", label_GES  ))
-
+  surveyIndex:::plot.SIlist(list(subidx[[i]]),main=names(subidx)[i])
+  ta = trendAnalysis(subidx[[i]], Timeframe)
+  
+  
+  
+  
+  
+  trends[[ names(subidx)[i] ]] <- ta 
+  yrange <- range(as.numeric( tail( rownames(subidx[[i]]$idx),Timeframe)))
+  myabline(ta$model,col=3,lwd=2,xlim=yrange)
+  
+  
+  
+  
+  averaged<-mean(head(ta$data$litter,3))*Maximum_increase
+  
+  emt<-emtrends(ta$model,"Year",var=1,side="<", level = Confidence_interval)
+  emt<-as.data.frame(emt)
+  if (emt$upper.CL<averaged){
+    label_GES<-'GES.'
+  }else{
+    label_GES<-'No GES.'
+  }
+  
+  legend("topleft",lty=1,col=c(4,3),legend= paste0("Trend limit for", Maximum_increase ,"% increase is ", round(averaged,2), ",\n with a real maximum increase of ", round(emt$upper.CL,2), ". ", label_GES  ))
+  
 }
 dev.off()
-
