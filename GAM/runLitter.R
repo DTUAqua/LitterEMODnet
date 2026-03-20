@@ -42,7 +42,7 @@ df2dr<-function(x){
 
 datafiles = list.files("data/EMODnet",pattern="*.csv$",full.names=TRUE,recursive=TRUE)
 
-dat <- read.csv(datafiles[1])
+dat <- read.csv(datafiles[1], sep=CSV_separator)
 dat$LT_Items = as.numeric(dat$LT_Items)
 
 ## Turn these columns into factors
