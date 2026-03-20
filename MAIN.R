@@ -9,7 +9,7 @@ path='data/EMODnet/EMD_seafloorbaselines_EEA_waters_filtered_20230317.csv'
 #which dataset do you want to import? Choose amongst EMOD, BITS, 
 #BTS, DYFS, EVHOE, IE-IGFS, NS-IBTS, SCOWCGFS
 type='EMOD'
-
+CSV_separator='\t' # '\t' of tab separetor other options are ',' (comma separated), ';' (semi column), ' ' (space separated)
 # ---------------------------------------------
 # Make the Overview Excel
 # ---------------------------------------------
