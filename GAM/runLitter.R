@@ -292,6 +292,7 @@ print(summary(model$pModels[[1]]))
 sink()
 
 ## QQ-plot
+## QQ-plot
 resid = residuals(model)
 png("output/qqplot.png",width=1200,height=800,pointsize=24)
 qqnorm(resid)
@@ -317,22 +318,24 @@ trendAnalysis<-function(x,nyears=6){
 }
 
 
-
 ## as abline, but clip to xlim
 myabline <- function(x,xlim,...){
-    usr <- par("usr")
-    clip(min(xlim),max(xlim),usr[3],usr[4])
-    abline(x,...)
-    clip(usr[1],usr[2],usr[3],usr[4])
+  usr <- par("usr")
+  clip(min(xlim),max(xlim),usr[3],usr[4])
+  abline(x,...)
+  clip(usr[1],usr[2],usr[3],usr[4])
 }
 
-## Global trend
+## Global 
+#trendAnalysis(model)
+#trendAnalysis(model,nyears=10)
+
 Maximum_increase<-0.05
 Confidence_interval<-0.10
 Timeframe<-6
 
 trends <- list()
-pdf("output/trendsbyEEZ.pdf",width=10,height=8,pointsize=10)
+pdf("output/trendsbyEEZ_6years.pdf",width=10,height=8,pointsize=10)
 par(mfrow=n2mfrow(length(subidx)),mar=c(4,3,4,1))
 for(i in 1:length(subidx)){
   surveyIndex:::plot.SIlist(list(subidx[[i]]),main=names(subidx)[i])
@@ -348,7 +351,9 @@ for(i in 1:length(subidx)){
   
   
   
-  
+  #estimated intercept
+  #coefficients(ta$model)[1]*0.05
+  #
   averaged<-mean(head(ta$data$litter,3))*Maximum_increase
   
   emt<-emtrends(ta$model,"Year",var=1,side="<", level = Confidence_interval)
