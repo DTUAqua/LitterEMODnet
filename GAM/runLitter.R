@@ -208,6 +208,15 @@ dev.off()
 ## NB : Remember to update this if grid is redefined!
 StdEffort = 1e6 / nrow(bgrid) 
 
+###########################################
+# Remove incomplete lines
+###########################################
+d<-d%>%filter(!is.na(Year))%>%
+  filter(!is.na(Gear2))%>%
+  filter(!is.na(lon))%>%
+  filter(!is.na(lat))%>%
+  filter(EFFORT!=0 & (!is.na(EFFORT)))
+
 ##########################################
 ## Define and fit model
 ##########################################
