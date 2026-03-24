@@ -7,7 +7,7 @@ Translation.LitterCat<-function(Data){
   # Check that al categories were defined in the excel
   id<-which(is.na(litterCat[Data$PARAM[Data$LTREF=='TSG-ML'],1]))
   if (length(unique( Data$PARAM[Data$LTREF=='TSG-ML'][id]))>0){
-    print(paste0('Missing categories voor TSG-ML list: ', unique( Data$PARAM[Data$LTREF=='MEDITS'][id]), '. Please complete the LitterCat.xlsx.'))
+    print(paste0('Missing categories voor TSG-ML list: ', unique( Data$PARAM[Data$LTREF=='TSG-ML'][id]), '. Please complete the LitterCat.xlsx.'))
   }
   
   #Change the TSG-ML to C_TS_REV
